@@ -1,3 +1,7 @@
+## Features to be added
+
+* Trait implementation instead of concrete Pedersen for commitment generation
+
 # Bulletproofs
 
 <img
@@ -186,8 +190,7 @@ worse code generation elsewhere ¯\\\_(ツ)\_/¯
 
 ## About
 
-This is a research project sponsored by [Interstellar][interstellar],
-developed by Henry de Valence, Cathie Yun, and Oleg Andreev.
+This is a fork from [Dalek](https://dalek.rs/)'s implementation.
 
 [bp_website]: https://crypto.stanford.edu/bulletproofs/
 [ristretto]: https://ristretto.group
