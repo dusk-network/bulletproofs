@@ -1,6 +1,7 @@
 //! Definition of linear combinations.
 
 use curve25519_dalek::scalar::Scalar;
+use std::collections::HashMap;
 use std::iter::FromIterator;
 use std::ops::{Add, Mul, Neg, Sub};
 
