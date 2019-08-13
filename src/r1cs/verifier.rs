@@ -324,9 +324,11 @@ impl<'t> Verifier<'t> {
         proof: &R1CSProof,
         pc_gens: &PedersenGens,
         bp_gens: &BulletproofGens,
-        thread_rng: &mut R) -> Result<(), R1CSError>
-        where
-            R: rand::Rng + rand::CryptoRng    {
+        thread_rng: &mut R,
+    ) -> Result<(), R1CSError>
+    where
+        R: rand::Rng + rand::CryptoRng,
+    {
         // Commit a length _suffix_ for the number of high-level variables.
         // We cannot do this in advance because user can commit variables one-by-one,
         // but this suffix provides safe disambiguation because each variable
