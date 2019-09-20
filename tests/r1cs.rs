@@ -118,6 +118,8 @@ impl ShuffleProof {
         input_commitments: &Vec<CompressedRistretto>,
         output_commitments: &Vec<CompressedRistretto>,
     ) -> Result<(), R1CSError> {
+        let mut rng = rand::thread_rng();
+
         // Apply a domain separator with the shuffle parameters to the transcript
         // XXX should this be part of the gadget?
         let k = input_commitments.len();
@@ -138,7 +140,7 @@ impl ShuffleProof {
 
         ShuffleProof::gadget(&mut verifier, input_vars, output_vars)?;
 
-        verifier.verify(&self.0, &pc_gens, &bp_gens)
+        verifier.verify(&self.0, &pc_gens, &bp_gens, &mut rng)
     }
 }
 
@@ -283,6 +285,8 @@ fn example_gadget_verify(
     proof: R1CSProof,
     commitments: Vec<CompressedRistretto>,
 ) -> Result<(), R1CSError> {
+    let mut rng = rand::thread_rng();
+
     let mut transcript = Transcript::new(b"R1CSExampleGadget");
 
     // 1. Create a verifier
@@ -304,7 +308,7 @@ fn example_gadget_verify(
 
     // 4. Verify the proof
     verifier
-        .verify(&proof, &pc_gens, &bp_gens)
+        .verify(&proof, &pc_gens, &bp_gens, &mut rng)
         .map_err(|_| R1CSError::VerificationError)
 }
 
@@ -418,6 +422,8 @@ fn range_proof_gadget() {
 }
 
 fn range_proof_helper(v_val: u64, n: usize) -> Result<(), R1CSError> {
+    let mut rng = rand::thread_rng();
+
     // Common
     let pc_gens = PedersenGens::default();
     let bp_gens = BulletproofGens::new(128, 1);
@@ -448,5 +454,5 @@ fn range_proof_helper(v_val: u64, n: usize) -> Result<(), R1CSError> {
     assert!(range_proof(&mut verifier, var.into(), None, n).is_ok());
 
     // Verifier verifies proof
-    Ok(verifier.verify(&proof, &pc_gens, &bp_gens)?)
+    Ok(verifier.verify(&proof, &pc_gens, &bp_gens, &mut rng)?)
 }
