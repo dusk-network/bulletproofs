@@ -359,8 +359,6 @@ impl ShuffleProof {
         input_commitments: &Vec<CompressedRistretto>,
         output_commitments: &Vec<CompressedRistretto>,
     ) -> Result<(), R1CSError> {
-        let mut rng = rand::thread_rng();
-
         // Apply a domain separator with the shuffle parameters to the transcript
         let k = input_commitments.len();
         transcript.commit_bytes(b"dom-sep", b"ShuffleProof");
@@ -378,7 +376,7 @@ impl ShuffleProof {
 
         ShuffleProof::gadget(&mut verifier, input_vars, output_vars)?;
 
-        verifier.verify(&self.0, &pc_gens, &bp_gens, &mut rng)
+        verifier.verify(&self.0, &pc_gens, &bp_gens)
     }
 }
 ```
@@ -501,8 +499,6 @@ Because only the prover knows the scalar values of the inputs and outputs, and t
 #         input_commitments: &Vec<CompressedRistretto>,
 #         output_commitments: &Vec<CompressedRistretto>,
 #     ) -> Result<(), R1CSError> {
-#         let mut rng = rand::thread_rng();
-#
 #         // Apply a domain separator with the shuffle parameters to the transcript
 #         let k = input_commitments.len();
 #         transcript.commit_bytes(b"dom-sep", b"ShuffleProof");
@@ -520,7 +516,7 @@ Because only the prover knows the scalar values of the inputs and outputs, and t
 #
 #         ShuffleProof::gadget(&mut verifier, input_vars, output_vars)?;
 #
-#         verifier.verify(&self.0, &pc_gens, &bp_gens, &mut rng)
+#         verifier.verify(&self.0, &pc_gens, &bp_gens)
 #     }
 # }
 # fn main() {
