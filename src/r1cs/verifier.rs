@@ -327,12 +327,16 @@ impl<'t> Verifier<'t> {
     /// [`BulletproofGens`] should have `gens_capacity` greater than
     /// the number of multiplication constraints that will eventually
     /// be added into the constraint system.
-    pub fn verify(
+    pub fn verify<R>(
         mut self,
         proof: &R1CSProof,
         pc_gens: &PedersenGens,
         bp_gens: &BulletproofGens,
-    ) -> Result<(), R1CSError> {
+        thread_rng: &mut R,
+    ) -> Result<(), R1CSError>
+    where
+        R: rand::Rng + rand::CryptoRng,
+    {
         // Commit a length _suffix_ for the number of high-level variables.
         // We cannot do this in advance because user can commit variables one-by-one,
         // but this suffix provides safe disambiguation because each variable
@@ -445,8 +449,7 @@ impl<'t> Verifier<'t> {
         // Create a `TranscriptRng` from the transcript. The verifier
         // has no witness data to commit, so this just mixes external
         // randomness into the existing transcript.
-        use rand::thread_rng;
-        let mut rng = self.transcript.build_rng().finalize(&mut thread_rng());
+        let mut rng = self.transcript.build_rng().finalize(thread_rng);
         let r = Scalar::random(&mut rng);
 
         let xx = x * x;
