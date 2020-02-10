@@ -501,8 +501,8 @@ Because only the prover knows the scalar values of the inputs and outputs, and t
 #         input_commitments: &Vec<CompressedRistretto>,
 #         output_commitments: &Vec<CompressedRistretto>,
 #     ) -> Result<(), R1CSError> {
-#         let mut rng = rand::thread_rng();
-#
+          let mut rng = rand::thread_rng();
+
 #         // Apply a domain separator with the shuffle parameters to the transcript
 #         let k = input_commitments.len();
 #         transcript.commit_bytes(b"dom-sep", b"ShuffleProof");
